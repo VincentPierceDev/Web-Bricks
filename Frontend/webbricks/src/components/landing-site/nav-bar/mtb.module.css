@@ -1,0 +1,27 @@
+@media(min-width: 0px)
+{
+    #mobile-nav-btn {
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        border: none;
+        gap: 0.25rem;
+        border-radius: 1rem;
+        margin-left: auto;
+        position: static;
+    }
+
+    .btn-bar {
+        height: 0.5rem;
+        width: 2.5rem;
+        background-color: var(--text-color-dark);
+        border-radius: 0.25rem;
+    }
+}
+
+@media(min-width: 1024px)
+{
+    #mobile-nav-btn{
+        display: none;
+    }
+}
