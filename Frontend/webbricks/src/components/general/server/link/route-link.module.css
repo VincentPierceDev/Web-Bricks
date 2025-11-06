@@ -9,26 +9,33 @@
 		font-size: clamp(1rem, 1.75vw, 1.25rem);
 		padding: 0.5rem 1rem;
 		border-radius: 0.5rem;
-		color: #d8d8d8;
+		color: var(--text-color-light);
+		white-space: nowrap;
+		display: inline-block;
 	}
 
 	.fancy-link {
 		color: var(--text-color-light);
 		background: linear-gradient(
-			to bottom right,
-			var(--accent-color) 30%,
-			var(--highlight-color)
+			to bottom,
+			var(--highlight-color) 45%,
+			var(--accent-color) 45%
 		);
-		overflow: hidden;
+		background-size: 100% 200%;
+		background-position: 0% 0%;
+		outline: 2px solid linear-gradient(to bottom, black, red);
+		box-shadow: none;
+		transition: background-position 0.2s ease-out;
 	}
 
 	.ghost-link {
-		outline: 2px solid var(--accent-color);
+		outline: 2px solid var(--tertiary-color);
+		transition: box-shadow 0.4s ease;
 	}
 
 	.solid-link {
-		color: #ffffff;
-		background-color: var(--accent-color);
+		color: var(--text-color-dark);
+		background-color: var(--tertiary-color);
 	}
 
 	.solid-link:hover {
@@ -51,7 +58,21 @@
 		border-radius: 10%;
 	}
 
-	.underline-text-link:hover::after {
-		background-color: var(--accent-color);
+	@media (pointer: fine) {
+		.fancy-link:hover {
+			color: var(--text-color-dark);
+			background-position: 0% 100%;
+			transition: background-position 0.3s ease;
+		}
+
+		.underline-text-link:hover::after {
+			background-color: var(--accent-color);
+		}
+
+		.ghost-link:hover {
+			box-shadow: 0px 0px 2px 2px var(--tertiary-color),
+				0px 0px 6px 6px var(--tertiary-color);
+			transition: box-shadow 0.4s ease;
+		}
 	}
 }

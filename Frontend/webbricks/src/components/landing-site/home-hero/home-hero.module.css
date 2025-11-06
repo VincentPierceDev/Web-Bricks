@@ -1,0 +1,29 @@
+@media (min-width: 0px) {
+	.heading-text {
+		font-family: var(--primary-font);
+		text-transform: uppercase;
+		font-weight: bolder;
+		font-size: clamp(2em, 7vw, 5em);
+	}
+
+	.subheading-text {
+		font-family: var(--secondary-font);
+	}
+
+	.link-wrapper {
+		display: flex;
+		flex-direction: column;
+		width: fit-content;
+		gap: clamp(1rem, 2vw, 1.2rem);
+	}
+}
+
+@media (min-width: 768px) {
+	.heading-split {
+		display: none;
+	}
+
+	.link-wrapper {
+		flex-direction: row;
+	}
+}

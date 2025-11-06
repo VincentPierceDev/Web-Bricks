@@ -1,27 +1,70 @@
-@media(min-width: 0px)
-{
-    #mobile-nav-btn {
-        display: flex;
-        flex-direction: column;
-        padding: 1rem;
-        border: none;
-        gap: 0.25rem;
-        border-radius: 1rem;
-        margin-left: auto;
-        position: static;
-    }
+@media (min-width: 0px) {
+	#mobile-nav-btn {
+		display: flex;
+		flex-direction: column;
+		padding: 0rem;
+		border: none;
+		gap: 0.5rem;
+		margin-left: auto;
+		position: static;
+		background: none;
+	}
 
-    .btn-bar {
-        height: 0.5rem;
-        width: 2.5rem;
-        background-color: var(--text-color-dark);
-        border-radius: 0.25rem;
-    }
+	.btn-bar {
+		height: 0.5rem;
+		width: 3rem;
+		background-color: var(--tertiary-color);
+		border-radius: 0.25rem;
+		user-select: none;
+	}
+
+	.toggled .btn-bar {
+		background-color: var(--highlight-color);
+	}
+
+	#top-bar {
+		translate: 0%;
+		rotate: 0deg;
+		transition: rotate 0.1s ease, translate 0.15s ease;
+		transition-delay: 0s, 0.1s;
+	}
+
+	#middle-bar {
+		opacity: 1;
+		transition: opacity 0s;
+		transition-delay: 0.1s;
+	}
+
+	#bottom-bar {
+		translate: 0%;
+		rotate: 0deg;
+		transition: rotate 0.1s ease, translate 0.15s ease;
+		transition-delay: 0s, 0.1s;
+	}
+
+	.toggled #top-bar {
+		translate: 0% 200%;
+		rotate: 45deg;
+		transition: translate 0.1s ease, rotate 0.15s ease;
+		transition-delay: 0s, 0.1s;
+	}
+
+	.toggled #middle-bar {
+		opacity: 0;
+		transition: opacity 0s;
+		transition-delay: 0.1s; /* delay for the bars to merge */
+	}
+
+	.toggled #bottom-bar {
+		translate: 0% -200%;
+		rotate: -45deg;
+		transition: translate 0.1s ease, rotate 0.15s ease;
+		transition-delay: 0s, 0.1s;
+	}
 }
 
-@media(min-width: 1024px)
-{
-    #mobile-nav-btn{
-        display: none;
-    }
+@media (min-width: 1024px) {
+	#mobile-nav-btn {
+		display: none;
+	}
 }

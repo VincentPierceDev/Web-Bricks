@@ -37,3 +37,10 @@ export default function RouteLink(Props: Props) {
 		</Link>
 	);
 }
+
+RouteLink.defaultProps = {
+	href: '/',
+	type: LinkType.Solid,
+	prefetch: false,
+	extraClass: '',
+};

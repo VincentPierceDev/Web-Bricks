@@ -1,4 +1,8 @@
 @media (min-width: 0px) {
+	#nav-background {
+		background-color: var(--primary-color);
+	}
+
 	#nav-bar {
 		display: flex;
 		flex-direction: row;
@@ -7,9 +11,9 @@
 		height: fit-content;
 		background: none;
 		padding: 3rem 1rem;
-		background-color: rgba(0, 0, 0, 0);
 		align-items: center;
 		position: relative;
+		z-index: 999;
 	}
 
 	#nav-bar.scroll {
@@ -21,28 +25,72 @@
 		height: auto;
 	}
 
-	.nav-list {
+	.nav-list,
+	.nav-list-open {
+		top: 0%;
+		width: 100vw;
 		list-style: none;
 		display: flex;
 		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 1.25rem;
 		flex: 1;
-		justify-content: space-evenly;
 		padding: 0rem 0rem;
 		position: absolute;
+		background-color: var(--tertiary-color);
+		height: 100vh;
+		z-index: -1;
+	}
+
+	.nav-list {
 		left: 100%;
-		background-color: red;
+		visibility: hidden;
+		opacity: 0;
+		transition: left 0.2s ease-in, opacity 0s, visibility 0s;
+		transition-delay: 0s, 0.2s, 0.2s;
 	}
 
-	.nav-list.open {
-		left: 75%;
-	}
-
-	.nav-item {
-		margin: 0rem 1.25vw;
+	.nav-list-open {
+		left: 0%;
+		visibility: visible;
+		opacity: 1;
+		transition: left 0.2s ease;
 	}
 
 	.link {
 		transition: 0.2s ease-in background-color, 0.3s color ease;
+	}
+
+	#account-wrapper {
+		display: flex;
+		flex-direction: column;
+		gap: 0rem;
+		align-items: center;
+	}
+}
+
+@media (min-width: 1024px) {
+	.nav-list,
+	.nav-list-open {
+		flex-direction: row;
+		align-items: center;
+		padding: 0;
+		position: static;
+		background-color: transparent;
+		justify-content: space-evenly;
+		opacity: 1;
+		height: 100%;
+		visibility: visible;
+	}
+
+	.nav-list-open {
+		translate: 0%;
+		transition: none;
+	}
+
+	.nav-item {
+		margin: 0rem 1.25vw;
 	}
 
 	#login-link,
@@ -63,23 +111,6 @@
 			translate: 0px -2px;
 			transition: 0.3s ease-out translate;
 		}
-	}
-
-	#account-wrapper {
-		display: flex;
-		flex-direction: column;
-		gap: 0rem;
-		align-items: center;
-	}
-}
-
-@media (min-width: 1024px) {
-	.nav-list {
-		flex-direction: row;
-		align-items: center;
-		padding: 0;
-		position: static;
-		background-color: transparent;
 	}
 
 	#link-container-1 {
