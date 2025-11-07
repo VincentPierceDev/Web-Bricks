@@ -10,7 +10,7 @@ export default function IndexPage() {
 
 	return (
 		<Layout metaData={{ title: title, description: description }}>
-			<HomeHero />
+			<HomeHero textLoopDelay={1000} />
 		</Layout>
 	);
 }

@@ -24,15 +24,14 @@ export default function NavBar() {
 					<Link href='/' id={styles['home-link']} prefetch={false}>
 						<img
 							className='full-image'
-							src='/next.svg'
+							src='/logo.svg'
 							alt='Webbricks business logo'
+							height={125}
+							width={500}
 						/>
 					</Link>
 				</div>
-				<MobileToggleButton
-					toggle={() => handleMobileBtnClick()}
-					state={menuOpened}
-				/>
+				<MobileToggleButton toggle={() => handleMobileBtnClick()} state={menuOpened} />
 				<ul className={styles[`${menuOpened ? 'nav-list-open' : 'nav-list'}`]}>
 					{
 						//first and last li's have margins in the css that need to be updated

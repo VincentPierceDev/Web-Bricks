@@ -1,44 +1,69 @@
 'use client';
-import { useState, useEffect, useRef, ReactElement } from 'react';
+import { useState, useEffect, useRef, RefObject } from 'react';
+import { Canvas } from '@react-three/fiber';
 import style from './home-hero.module.css';
 import Link, { LinkType } from '@/components/general/server/link/route-link';
 
-export default function HomeHero() {
-	let currentIndex = useRef<number>(0);
-	const loopSpeed: number = 3500;
+interface Props {
+	textLoopDelay: number;
+}
 
-	const belongingList: any = [
-		<strong className={style['heading-text']}>Code</strong>,
-		<strong className={style['heading-text']}>Components</strong>,
-		<strong className={style['heading-text']}>Way</strong>,
+export default function HomeHero(Props: Props) {
+	const [currentTransition, setCurrentTransition] = useState<string>(style['use-text-enter']);
+
+	//elements that are swapped
+	type displayTextColor<first, second> = {
+		text: first;
+		color: second;
+	};
+
+	const replacementList: displayTextColor<string, string>[] = [
+		{ text: 'Code', color: style['accent-glow'] },
+		{ text: 'Bricks', color: style['highlight-glow'] },
+		{ text: 'Way', color: style['tertiary-glow'] },
 	];
 
-	const [currentBelonging, setCurrentBelonging] = useState<ReactElement | null>(belongingList[0]);
+	const [currentReplacement, setCurrentReplacement] = useState<displayTextColor<string, string>>(
+		replacementList[0]
+	);
+
+	let currentIndex: RefObject<number> = useRef<number>(0);
+	const loopSpeed: number = Props.textLoopDelay;
+	const transitionDelay: number = loopSpeed - 300;
 
 	//update the looping text
 	useEffect(() => {
-		const textLoop: NodeJS.Timeout = setInterval(() => {
-			setCurrentBelonging(belongingList[currentIndex.current]);
-			currentIndex.current =
-				currentIndex.current == belongingList.length - 1 ? 0 : ++currentIndex.current;
+		const textSwapLoop: NodeJS.Timeout = setInterval(() => {
+			setCurrentTransition(style['use-text-enter']);
+			setCurrentReplacement(replacementList[currentIndex.current]);
+			currentIndex.current = (currentIndex.current + 1) % replacementList.length;
+
+			//add the exit class effect
+			const swapEffect: NodeJS.Timeout = setTimeout(() => {
+				setCurrentTransition(style['use-text-exit']);
+			}, transitionDelay);
+
+			return () => clearInterval(swapEffect);
 		}, loopSpeed);
 
-		return () => clearInterval(textLoop);
-	}, []);
+		return () => clearInterval(textSwapLoop);
+	}, [loopSpeed]);
 
 	return (
 		<section id={style['hero-section']} className='section'>
-			<div className='container'>
+			<div id={style['content-container']} className='container'>
 				<div className={style['text-content']}>
 					<div className={style['heading-wrapper']}>
 						<span className={style['heading-text']}>Your </span>
 						<br className={style['heading-split']} />
-						{currentBelonging}
-						{/*remove comma from being strong*/}
-						<span className={style['heading-text']}>,</span>
+						<strong
+							className={`${style['heading-text']} ${currentTransition} ${currentReplacement.color}`}
+						>
+							{currentReplacement.text}
+						</strong>
 					</div>
 					<h1 className={style['subheading-text']}>
-						Webricks turns your frontend components into a visual library
+						Web-bricks turns your frontend components into a visual library
 					</h1>
 					<div className={style['link-wrapper']}>
 						<Link
@@ -54,7 +79,19 @@ export default function HomeHero() {
 						</Link>
 					</div>
 				</div>
+				<div id={style['canvas-container']}>
+					<Canvas>
+						<mesh>
+							<boxGeometry />
+							<meshStandardMaterial />
+						</mesh>
+					</Canvas>
+				</div>
 			</div>
 		</section>
 	);
 }
+
+HomeHero.defaultProps = {
+	textLoopDelay: 1500,
+};
