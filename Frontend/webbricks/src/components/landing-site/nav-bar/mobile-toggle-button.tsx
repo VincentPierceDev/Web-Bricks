@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import styles from './mtb.module.css';
 
 type Props = {

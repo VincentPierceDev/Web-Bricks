@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import '../landing-globals.css';
 import styles from './navbar.module.css';
@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 export default function NavBar() {
 	const [menuOpened, setMenuOpened] = useState(false);
-	const handleMobileBtnClick = () => setMenuOpened(!menuOpened);
+	const handleMobileBtnClick = () => setMenuOpened(!menuOpened); //no point memoizing
 
 	useEffect(() => {
 		document.body.classList.toggle('no-scroll', menuOpened);
@@ -56,7 +56,7 @@ export default function NavBar() {
 					<li id={styles['account-wrapper']}>
 						<NavLink
 							id={styles['login-link']}
-							extraClass={styles['link']}
+							extraClass={`${styles['link']}`}
 							href='/Login'
 							type={LinkType.Text}
 							prefetch={false}

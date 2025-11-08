@@ -2,7 +2,13 @@ import { Metadata } from 'next';
 import NavBar from '@/components/landing-site/nav-bar/navbar';
 import Favicon from '@/assets/favicon.ico';
 
-function Layout({ children, metaData }: { children: React.ReactNode; metaData: Metadata }) {
+export default function Layout({
+	children,
+	metaData,
+}: {
+	children: React.ReactNode;
+	metaData: Metadata;
+}) {
 	return (
 		<html lang='en'>
 			<head>
@@ -20,5 +26,3 @@ function Layout({ children, metaData }: { children: React.ReactNode; metaData: M
 		</html>
 	);
 }
-
-export default Layout;

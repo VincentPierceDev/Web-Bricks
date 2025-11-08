@@ -1,8 +1,6 @@
 import Layout from '@/app/webpage-layout';
 import HomeHero from '@/components/landing-site/home-hero/home-hero';
-
 import style from './page.module.css';
-import Link, { LinkType } from '@/components/general/server/link/route-link';
 
 export default function IndexPage() {
 	const title: string = 'Home • Webbricks';
@@ -10,7 +8,8 @@ export default function IndexPage() {
 
 	return (
 		<Layout metaData={{ title: title, description: description }}>
-			<HomeHero textLoopDelay={1000} />
+			<HomeHero textLoopDelay={3000} />
+			<section className='section'>new section</section>
 		</Layout>
 	);
 }

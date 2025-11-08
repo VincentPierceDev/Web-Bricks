@@ -1,17 +1,34 @@
 'use client';
 import { useState, useEffect, useRef, RefObject } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useLoader } from '@react-three/fiber';
+import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import style from './home-hero.module.css';
 import Link, { LinkType } from '@/components/general/server/link/route-link';
+import useIsSlimmerThan from '@/hooks/use-is-screen-sizes';
 
 interface Props {
 	textLoopDelay: number;
 }
 
 export default function HomeHero(Props: Props) {
+	//just start with mobile by default in case of underlying issues
+	let isMobile: boolean = useIsSlimmerThan(1024);
+
+	return (
+		<section id={style['hero-section']} className='section'>
+			<div id={style['content-container']} className='container'>
+				{MainContent(Props.textLoopDelay)}
+				{isMobile ? MobileHTMLDisplay() : ThreeScene()}
+			</div>
+		</section>
+	);
+}
+
+//the text, buttons, words and stuff
+function MainContent(textLoopDelay: number) {
 	const [currentTransition, setCurrentTransition] = useState<string>(style['use-text-enter']);
 
-	//elements that are swapped
+	//elements that are swapped for the text
 	type displayTextColor<first, second> = {
 		text: first;
 		color: second;
@@ -28,9 +45,10 @@ export default function HomeHero(Props: Props) {
 	);
 
 	let currentIndex: RefObject<number> = useRef<number>(0);
-	const loopSpeed: number = Props.textLoopDelay;
+	const loopSpeed: number = textLoopDelay;
 	const transitionDelay: number = loopSpeed - 300;
 
+	//this may need to be a custom hook later for swapping stuff, but currently not doing it
 	//update the looping text
 	useEffect(() => {
 		const textSwapLoop: NodeJS.Timeout = setInterval(() => {
@@ -38,7 +56,7 @@ export default function HomeHero(Props: Props) {
 			setCurrentReplacement(replacementList[currentIndex.current]);
 			currentIndex.current = (currentIndex.current + 1) % replacementList.length;
 
-			//add the exit class effect
+			//add the exit class effect (the drop down and lift up)
 			const swapEffect: NodeJS.Timeout = setTimeout(() => {
 				setCurrentTransition(style['use-text-exit']);
 			}, transitionDelay);
@@ -50,45 +68,55 @@ export default function HomeHero(Props: Props) {
 	}, [loopSpeed]);
 
 	return (
-		<section id={style['hero-section']} className='section'>
-			<div id={style['content-container']} className='container'>
-				<div className={style['text-content']}>
-					<div className={style['heading-wrapper']}>
-						<span className={style['heading-text']}>Your </span>
-						<br className={style['heading-split']} />
-						<strong
-							className={`${style['heading-text']} ${currentTransition} ${currentReplacement.color}`}
-						>
-							{currentReplacement.text}
-						</strong>
-					</div>
-					<h1 className={style['subheading-text']}>
-						Web-bricks turns your frontend components into a visual library
-					</h1>
-					<div className={style['link-wrapper']}>
-						<Link
-							id={style['get-started-link']}
-							extraClass=''
-							type={LinkType.Fancy}
-							href='/Sign-Up'
-						>
-							<span className='title'>Get Started</span>
-						</Link>
-						<Link id={style['learn-more-link']} type={LinkType.Ghost} href='/about'>
-							<span className='title'>Learn More</span>
-						</Link>
-					</div>
-				</div>
-				<div id={style['canvas-container']}>
-					<Canvas>
-						<mesh>
-							<boxGeometry />
-							<meshStandardMaterial />
-						</mesh>
-					</Canvas>
-				</div>
+		<div className={style['text-content']}>
+			<div className={style['heading-wrapper']}>
+				<span className={style['heading-text']}>Your </span>
+				<br className={style['heading-split']} />
+				<strong
+					className={`${style['heading-text']} ${currentTransition} ${currentReplacement.color}`}
+				>
+					{currentReplacement.text}
+				</strong>
 			</div>
-		</section>
+			<h1 className={style['subheading-text']}>
+				Web-bricks turns your frontend components into a visual library
+			</h1>
+			<div className={style['link-wrapper']}>
+				<Link id={style['get-started-link']} extraClass='' type={LinkType.Fancy} href='/Sign-Up'>
+					<span className='title'>Get Started</span>
+				</Link>
+				<Link id={style['learn-more-link']} type={LinkType.Ghost} href='/about'>
+					<span className='title'>Learn More</span>
+				</Link>
+			</div>
+		</div>
+	);
+}
+
+//If this never gets called then react three will never be setup
+//so mobile optimizations should work
+function ThreeScene() {
+	const htmlModel = useLoader(FBXLoader, '/HTML3DIcon.fbx');
+
+	return (
+		<div id={style['canvas-container']}>
+			<Canvas>
+				<primitive
+					object={htmlModel}
+					position={[-10, -250, -275]}
+					rotation={[0, 80, 0]}
+					scale={[0.75, 0.75, 0.75]}
+				/>
+			</Canvas>
+		</div>
+	);
+}
+
+function MobileHTMLDisplay() {
+	return (
+		<div id={style['mobile-html-icon-container']}>
+			<span>&gt;&gt;Test Content Mobile&lt;&lt;</span>
+		</div>
 	);
 }
 
