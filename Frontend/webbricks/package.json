@@ -16,6 +16,7 @@
 		"save-dev": "^0.0.1-security"
 	},
 	"devDependencies": {
+		"@react-three/drei": "^10.7.6",
 		"@react-three/fiber": "^9.4.0",
 		"@testing-library/dom": "^10.4.1",
 		"@testing-library/jest-dom": "^6.9.1",

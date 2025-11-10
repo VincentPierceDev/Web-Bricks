@@ -1,10 +1,10 @@
 'use client';
-import { useState, useEffect, useRef, RefObject } from 'react';
-import { Canvas, useLoader } from '@react-three/fiber';
-import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+import { useState, useEffect, useRef, RefObject, MouseEventHandler, Component } from 'react';
+import { Canvas } from '@react-three/fiber';
 import style from './home-hero.module.css';
 import Link, { LinkType } from '@/components/general/server/link/route-link';
 import useIsSlimmerThan from '@/hooks/use-is-screen-sizes';
+import Model, { transform } from './model';
 
 interface Props {
 	textLoopDelay: number;
@@ -18,11 +18,15 @@ export default function HomeHero(Props: Props) {
 		<section id={style['hero-section']} className='section'>
 			<div id={style['content-container']} className='container'>
 				{MainContent(Props.textLoopDelay)}
-				{isMobile ? MobileHTMLDisplay() : ThreeScene()}
+				{isMobile ? <MobileHTMLDisplay /> : <ThreeScene />}
 			</div>
 		</section>
 	);
 }
+
+HomeHero.defaultProps = {
+	textLoopDelay: 1500,
+};
 
 //the text, buttons, words and stuff
 function MainContent(textLoopDelay: number) {
@@ -96,17 +100,46 @@ function MainContent(textLoopDelay: number) {
 //If this never gets called then react three will never be setup
 //so mobile optimizations should work
 function ThreeScene() {
-	const htmlModel = useLoader(FBXLoader, '/HTML3DIcon.fbx');
+	const [modelRotation, setModelRotation] = useState<number>(80);
+	const rotateTimeout = useRef<NodeJS.Timeout>(null);
+
+	//transform is from model.tsx
+	const HTMLTransform: transform = {
+		position: [0, -1.5, 0],
+		rotation: [0, modelRotation, 0],
+		scale: [1.3, 1.3, 1.3],
+	};
+
+	const ConstantRotate = () => {
+		setModelRotation(modelRotation + 0.01);
+		console.log('should be rotating');
+	};
+
+	const RotateWithMouse = (event: any) => {
+		console.log('mouse over');
+		setModelRotation(70);
+		rotateTimeout.current = setInterval(ConstantRotate, 200);
+	};
+
+	const StopRotatingWithMouse = (event: any) => {
+		console.log('mouse leave');
+		//setModelRotation(80);
+
+		if (rotateTimeout.current) {
+			//clearInterval(rotateTimeout.current);
+		}
+	};
 
 	return (
-		<div id={style['canvas-container']}>
+		<div
+			id={style['canvas-container']}
+			onMouseEnter={RotateWithMouse}
+			onMouseLeave={StopRotatingWithMouse}
+		>
 			<Canvas>
-				<primitive
-					object={htmlModel}
-					position={[-10, -250, -275]}
-					rotation={[0, 80, 0]}
-					scale={[0.75, 0.75, 0.75]}
-				/>
+				<ambientLight intensity={5} color='#FFFFFF' />
+
+				<Model gltfPath='/three-js/HTML3DIcon.gltf' transform={HTMLTransform} />
 			</Canvas>
 		</div>
 	);
@@ -119,7 +152,3 @@ function MobileHTMLDisplay() {
 		</div>
 	);
 }
-
-HomeHero.defaultProps = {
-	textLoopDelay: 1500,
-};

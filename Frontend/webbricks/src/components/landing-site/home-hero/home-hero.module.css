@@ -89,6 +89,8 @@
 		width: 100%;
 		max-width: 40rem;
 		margin-left: auto;
+		position: relative;
+		z-index: 1;
 	}
 }
 
@@ -110,5 +112,16 @@
 	.heading-wrapper::after,
 	.heading-wrapper::before {
 		left: 50%;
+	}
+
+	#canvas-container::after {
+		content: '';
+		width: 100%;
+		height: 100%;
+		background: radial-gradient(circle at center, var(--tertiary-color) -50%, transparent 50%);
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		z-index: -1;
 	}
 }
